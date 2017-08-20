@@ -10,3 +10,7 @@ class UserProfile(models.Model):
    city = models.CharField(max_length=256, blank=False, null=False)
    interests = models.CharField(max_length=256, blank=False, null=False)
 
+class Category(models.Model):
+   name = models.CharField(max_length=256, blank=False, null=False)
+
+
