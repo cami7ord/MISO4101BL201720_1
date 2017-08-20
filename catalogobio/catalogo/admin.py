@@ -5,6 +5,18 @@ from .models import UserProfile
 from .models import Category
 from .models import Species
 
-admin.site.register(UserProfile)
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user_username', 'country', 'city')
+
+    def user_username(self, instance):
+        return instance.user.username
+
+class SpeciesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'scientific_name', 'category', 'description')
+
+
+admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Species, SpeciesAdmin)
 admin.site.register(Category)
-admin.site.register(Species)
