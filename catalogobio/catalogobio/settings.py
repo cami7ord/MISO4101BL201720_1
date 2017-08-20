@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'catalogobio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'catalogobioat',
-        'USER': 'catalogobio',
+        'NAME': 'catalogobio',
+        'USER': 'postgres',
         'PASSWORD': 'catalogobio',
         'HOST': '127.0.0.1',
-        'PORT': '5431',
+        'PORT': '5432',
     }
 }
 
