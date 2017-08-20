@@ -27,7 +27,12 @@ class Species(models.Model):
     scientific_name = models.CharField(max_length=256, blank=False, null=False)
     category = models.ForeignKey(Category)
     picture = models.CharField(max_length=256, blank=False, null=False)
-    description = models.CharField(max_length=256, blank=False, null=False)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.scientific_name
+
+class Comment(models.Model):
+    species = models.ForeignKey(Species)
+    email = models.CharField(max_length=256, blank=False, null=False)
+    text = models.TextField(blank=True, null=True)
