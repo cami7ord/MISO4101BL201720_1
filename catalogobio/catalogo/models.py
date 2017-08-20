@@ -16,7 +16,10 @@ class UserProfile(models.Model):
    interests = models.CharField(max_length=256, blank=False, null=False)
 
 class Category(models.Model):
-   name = models.CharField(max_length=256, blank=False, null=False)
+    name = models.CharField(max_length=256, blank=False, null=False)
+
+    def __str__(self):
+        return self.name
 
 class Species(models.Model):
     name = models.CharField(max_length=256, blank=False, null=False)
@@ -25,3 +28,6 @@ class Species(models.Model):
     category = models.ForeignKey(Category)
     picture = models.CharField(max_length=256, blank=False, null=False)
     description = models.CharField(max_length=256, blank=False, null=False)
+
+    def __str__(self):
+        return self.scientific_name
