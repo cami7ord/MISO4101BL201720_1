@@ -26,7 +26,7 @@ class Species(models.Model):
     clasification = CLASIFICATION_CHOICES
     scientific_name = models.CharField(max_length=256, blank=False, null=False)
     category = models.ForeignKey(Category)
-    picture = models.CharField(max_length=256, blank=False, null=False)
+    picture = models.ImageField(upload_to='images', null=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):

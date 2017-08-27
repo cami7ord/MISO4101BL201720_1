@@ -14,8 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.conf.urls import include
 from django.contrib import admin
+
+from catalogo import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^catalogo/',include('catalogo.urls', namespace="images")),
 ]

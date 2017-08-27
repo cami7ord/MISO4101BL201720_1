@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{species.name}}</title>
+  </head>
+  <body>
+    <div class="name">
+      <label for="name">Name: </label>
+      <input type="text" name="name" value="{{species.name}}" readonly>
+    </div>
+    <div class="scientific_name">
+      <label for="scientific_name">Scientific Name: </label>
+      <input type="text" name="scientific_name" value="{{species.scientific_name}}" readonly>
+    </div>
+    <div class="category">
+      <label for="category">Category: </label>
+      <input type="text" name="category" value="{{species.category.name}}" readonly>
+    </div>
+    <div class="picture">
+      <label for="picture">Picture: </label>
+      <img name="picture" src="/{{species.picture}}">
+    </div>
+    <div class="name">
+      <label for="description">Description: </label>
+      <textarea name="description" rows="8" cols="80" readonly>{{species.description}}</textarea>
+    </div>
+  </body>
+</html>
