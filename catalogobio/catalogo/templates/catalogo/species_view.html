@@ -1,0 +1,39 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{species.name}}</title>
+  </head>
+  <body>
+    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+      <form class="" action="{% url 'images:index' %}" method="get">
+          <div class="form-group">
+            <label for="name" class="control-label">Name: </label>
+            <input type="text" name="name" value="{{species.name}}" class="form-control" readonly>
+          </div>
+          <div class="form-group scientific_name">
+            <label for="scientific_name" class="control-label">Scientific Name: </label>
+            <input type="text" name="scientific_name" value="{{species.scientific_name}}" class="form-control" readonly>
+          </div>
+          <div class="form-group category">
+            <label for="category" class="control-label">Category: </label>
+            <input type="text" name="category" value="{{species.category.name}}" class="form-control" readonly>
+          </div>
+          <div class="form-group picture">
+            <label for="picture" class="control-label">Picture: </label>
+            <img name="picture" src="/{{species.picture}}" class="img-responsive">
+          </div>
+          <div class="form-group name">
+            <label for="description" class="control-label">Description: </label>
+            <textarea name="description" rows="8" cols="80"  class="form-control" readonly>{{species.description}}</textarea>
+          </div>
+          <div class="form-group ">
+            <input type="submit" name="back" value="Index" class="btn btn-primary btn-block">
+          </div>
+      </form>
+    </div>
+  </body>
+</html>

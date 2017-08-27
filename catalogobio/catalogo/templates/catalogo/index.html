@@ -1,0 +1,24 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Índice</title>
+  </head>
+  <body>
+    <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
+      <span class="glyphicon glyphicon-plus-sign"></span>
+      Add Species
+    </a>
+    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+    {% for species in species_list %}
+      <div class="">
+        <a href="species_view?id={{species.id}}">{{species.name}}</a>
+        <img src="/{{species.picture}}" class="img-responsive">
+      </div>
+    {% endfor %}
+    </div>
+  </body>
+</html>

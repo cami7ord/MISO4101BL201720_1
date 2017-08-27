@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalogo',
+    'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -80,8 +81,8 @@ WSGI_APPLICATION = 'catalogobio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'catalogobio',
-        'USER': 'postgres',
+        'NAME': 'catalogobioat',
+        'USER': 'catalogobio',
         'PASSWORD': 'catalogobio',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -128,15 +129,14 @@ ALLOWED_HOSTS = ['*']
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = "/images/"
+STATIC_ROOT = 'staticfiles'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'images'),
 )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
