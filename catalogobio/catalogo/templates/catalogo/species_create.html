@@ -1,3 +1,6 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,13 +8,18 @@
     <title>Especie</title>
   </head>
   <body>
+    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
     {% block content %}
       <form action="{% url 'images:addspecies' %}"
       enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Añadir">
+        {% bootstrap_form form %}
+        <!-- {{form.as_p}} -->
+        {% buttons %}
+        <input type="submit" value="Add" class="btn btn-primary btn-block"/>
+        {% endbuttons %}
       </form>
     {% endblock %}
+    </div>
   </body>
 </html>
