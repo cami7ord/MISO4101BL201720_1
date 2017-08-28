@@ -1,6 +1,6 @@
-import sys
+from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import User
@@ -44,6 +44,30 @@ def species_create(request):
         form = SpeciesForm()
 
     return render(request, 'catalogo/species_create.html', {'form': form})
+
+def login_view(request):
+
+    if request.user.is_authenticated():
+        return redirect(reverse('catalogo/index.html'))
+
+    message = ""
+
+    if(request.method == 'POST'):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect(reverse('catalogo/index.html'))
+        else:
+            message = "Nombre de usuario o clave incorrecta"
+
+    return render(request, 'catalogo/login.html', {'message':message})
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("catalogo/index.html"))
 
 
 def speciesUpdate(request):

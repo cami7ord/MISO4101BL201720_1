@@ -3,31 +3,58 @@
 {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>Listado</title>
-</head>
-<body>
-<div class="container">
-    <h2 class="text-center">Listado de Especies</h2>
-    <div>
-        <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-            Agregar Especie
-        </a>
-    </div>
-    <ul class="list-group">
-        {% for species in species_list %}
-        <li class="list-group-item">
-            <div class="" style="margin-top: 5px;">
-                <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
-                <img src="/{{species.picture}}" class="img-responsive" style="margin-top: 5px;">
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+    <title>Índice</title>
+  </head>
+  <body>
 
-</div>
+    <div class="container">
 
-</body>
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="{% url 'catalogo:index' %}">Home</a></li>
+            {% if user.is_authenticated %}
+              <li role="presentation"><a class="glyphicon glyphicon-user" href="{% url 'catalogo:userUpdate' %}">{{ user.username }}</a></li>
+              <li role="presentation"><a class="glyphicon glyphicon-log-out" href="{% url 'catalogo:logout' %}">Logout</a></li>
+            {% else %}
+              <li role="presentation"><a href="{% url 'catalogo:index' %}">Registro</a></li>
+              <li role="presentation"><a class="glyphicon glyphicon-log-in"href="{% url 'catalogo:login' %}">Iniciar Sesion</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+        <h3 class="text-muted">Catalogo</h3>
+      </div>
+
+      <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Add Species
+      </a>
+
+        <h2 class="text-center">Listado de Especies</h2>
+
+        <div>
+            <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                Agregar Especie
+            </a>
+        </div>
+
+        <ul class="list-group">
+            {% for species in species_list %}
+            <li class="list-group-item">
+                <div class="" style="margin-top: 5px;">
+                    <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
+                    <img src="/{{species.picture}}" class="img-responsive" style="margin-top: 5px;">
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div> <!-- /container -->
+
+  </body>
+
 </html>
+
