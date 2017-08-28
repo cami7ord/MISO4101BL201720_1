@@ -10,7 +10,7 @@
   <body>
     {% block content %}
         <div class="row">
-            <div class="col-md-4 col-md-offset-4"></div>
+            <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
                 <div class="page-header"><h2>Login</h2></div>
                 {% if message %}
                     <div class="alert alert-danger">
@@ -22,12 +22,12 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label class="control-label" for="username">Nombre de usuario</label>
-                        <input type="text" id="username" name="username" class="form-control" value="{{ username }}">
+                        <input type="text" id="username" name="username" class="form-control" value="{{ username }}" placeholder="Nombre de usuario">
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" value="{{ password }}">
+                        <input type="password" id="password" name="password" class="form-control" value="{{ password }}" placeholder="Clave">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block">Login</button>

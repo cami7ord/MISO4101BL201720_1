@@ -11,6 +11,8 @@
 
     <div class="container">
 
+        <br/>
+
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
@@ -19,18 +21,13 @@
               <li role="presentation"><a class="glyphicon glyphicon-user" href="{% url 'catalogo:userUpdate' %}">{{ user.username }}</a></li>
               <li role="presentation"><a class="glyphicon glyphicon-log-out" href="{% url 'catalogo:logout' %}">Logout</a></li>
             {% else %}
-              <li role="presentation"><a href="{% url 'catalogo:index' %}">Registro</a></li>
-              <li role="presentation"><a class="glyphicon glyphicon-log-in"href="{% url 'catalogo:login' %}">Iniciar Sesion</a></li>
+              <li role="presentation"><a href="{% url 'catalogo:signup' %}">Registro</a></li>
+              <li role="presentation"><a href="{% url 'catalogo:login' %}">Iniciar Sesion</a></li>
             {% endif %}
           </ul>
         </nav>
         <h3 class="text-muted">Catalogo</h3>
       </div>
-
-      <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus-sign"></span>
-        Add Species
-      </a>
 
         <h2 class="text-center">Listado de Especies</h2>
 
