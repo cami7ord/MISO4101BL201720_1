@@ -8,17 +8,38 @@
     <title>Índice</title>
   </head>
   <body>
-    <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
-      <span class="glyphicon glyphicon-plus-sign"></span>
-      Add Species
-    </a>
-    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-    {% for species in species_list %}
-      <div class="">
-        <a href="species_view?id={{species.id}}">{{species.name}}</a>
-        <img src="/{{species.picture}}" class="img-responsive">
+
+    <div class="container">
+
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="{% url 'catalogo:index' %}">Home</a></li>
+            {% if user.is_authenticated %}
+              <li role="presentation"><a class="glyphicon glyphicon-user" href="{% url 'catalogo:userUpdate' %}">{{ user.username }}</a></li>
+              <li role="presentation"><a class="glyphicon glyphicon-log-out" href="{% url 'catalogo:logout' %}">Logout</a></li>
+            {% else %}
+              <li role="presentation"><a href="{% url 'catalogo:index' %}">Registro</a></li>
+              <li role="presentation"><a class="glyphicon glyphicon-log-in"href="{% url 'catalogo:login' %}">Iniciar Sesion</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+        <h3 class="text-muted">Catalogo</h3>
       </div>
-    {% endfor %}
-    </div>
+
+      <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Add Species
+      </a>
+      <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+      {% for species in species_list %}
+        <div class="">
+          <a href="species_view?id={{species.id}}">{{species.name}}</a>
+          <img src="/{{species.picture}}" class="img-responsive">
+        </div>
+      {% endfor %}
+      </div>
+
+    </div> <!-- /container -->
   </body>
 </html>
