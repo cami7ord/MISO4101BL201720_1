@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 
+
 CLASIFICATION_CHOICES = (
     ('1','1'),
     ('2','2'),
@@ -36,3 +37,4 @@ class Comment(models.Model):
     species = models.ForeignKey(Species)
     email = models.CharField(max_length=256, blank=False, null=False)
     text = models.TextField(blank=True, null=True)
+
