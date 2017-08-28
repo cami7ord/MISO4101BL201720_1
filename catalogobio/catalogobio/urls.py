@@ -17,9 +17,10 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 
-from catalogo import views
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(url='/catalogo/', permanent=False), name='redirect'),
     url(r'^admin/', admin.site.urls),
     url(r'^catalogo/',include('catalogo.urls', namespace="images")),
 ]
