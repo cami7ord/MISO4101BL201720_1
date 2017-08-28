@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import Species
 from .models import Category
+from .models import User
+from .models import UserProfile
 from .forms import SpeciesForm
 
 # Create your views here.
@@ -51,3 +53,31 @@ def speciesUpdate(request):
 
     else:
         return HttpResponse(False)
+
+def userUpdate(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated():
+            current_user = User.objects.get(id= request.user.id)
+            context = {'user': current_user}
+            return render(request, 'catalogo/user_view.html', context)
+
+        else:
+            '''Cambiar x la ruta redirect al login'''
+            return HttpResponseRedirect(reverse('images:index'))
+
+def updateInformation (request):
+
+    if request.method == 'GET':
+        name = request.GET.get('name')
+        last_name = request.GET.get('lname')
+        username = request.GET.get('uname')
+
+        country = request.GET.get('country')
+        city = request.GET.get('city')
+        interests = request.GET.get('interests')
+
+        User.objects.filter(id=request.user.id).update(first_name=name, last_name=last_name, username=username)
+        UserProfile.objects.filter(user_id=request.user.id).update(country=country, city=city, interests=interests)
+
+        return HttpResponseRedirect(reverse('images:index'))
+
