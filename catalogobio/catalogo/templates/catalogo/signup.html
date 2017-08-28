@@ -9,8 +9,9 @@
   </head>
   <body>
     <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+    <div class="page-header"><h2>Registro</h2></div>
     {% block content %}
-      <form action="{% url 'images:register' %}"
+      <form action="{% url 'catalogo:signup' %}"
       enctype="multipart/form-data" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}

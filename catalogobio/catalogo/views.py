@@ -3,12 +3,10 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
-from .models import User
 from .models import Species
 from .models import Category
 from .models import User
 from .models import UserProfile
-from .forms import SpeciesForm
 from .forms import SpeciesForm, UserForm  # , ProfileForm
 
 
@@ -48,7 +46,7 @@ def species_create(request):
 def login_view(request):
 
     if request.user.is_authenticated():
-        return redirect(reverse('catalogo/index.html'))
+        return redirect(reverse('catalogo:index'))
 
     message = ""
 
@@ -59,7 +57,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect(reverse('catalogo/index.html'))
+            return redirect(reverse('catalogo:index'))
         else:
             message = "Nombre de usuario o clave incorrecta"
 
@@ -67,7 +65,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("catalogo/index.html"))
+    return HttpResponseRedirect(reverse("catalogo:index"))
 
 
 def speciesUpdate(request):
@@ -89,13 +87,12 @@ def speciesUpdate(request):
 def userUpdate(request):
     if request.method == 'GET':
         if request.user.is_authenticated():
-            current_user = User.objects.get(id= request.user.id)
+            current_user = User.objects.get(id=request.user.id)
             context = {'user': current_user}
             return render(request, 'catalogo/user_view.html', context)
 
         else:
-            '''Cambiar x la ruta redirect al login'''
-            return HttpResponseRedirect(reverse('images:index'))
+            return HttpResponseRedirect(reverse('catalogo/login.html'))
 
 def updateInformation (request):
 
@@ -111,7 +108,7 @@ def updateInformation (request):
         User.objects.filter(id=request.user.id).update(first_name=name, last_name=last_name, username=username)
         UserProfile.objects.filter(user_id=request.user.id).update(country=country, city=city, interests=interests)
 
-        return HttpResponseRedirect(reverse('images:index'))
+        return HttpResponseRedirect(reverse('catalogo:index'))
 
 
 def signup(request):
@@ -142,7 +139,7 @@ def signup(request):
             user_profile.save()
 
 
-        return HttpResponseRedirect(reverse('images:index'))
+        return HttpResponseRedirect(reverse('catalogo:index'))
     else:
         form = UserForm()
     return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
