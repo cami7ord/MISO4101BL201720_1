@@ -1,3 +1,4 @@
+import sys
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -92,8 +93,7 @@ def updateInformation (request):
 def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
-        # profileform = ProfileForm(request.POST)
-        if form.is_valid():  # and profileform.is_valid():
+        if form.is_valid():
             cleaned_data = form.cleaned_data
             username = cleaned_data.get('username')
             first_name = cleaned_data.get('first_name')
@@ -107,14 +107,18 @@ def signup(request):
             user_model.email = email
             user_model.save()
 
-            # user = User.objects.get('id')
+            last_user = User.objects.last()
 
-            # profileform.user = user
+            user_profile= UserProfile()
+            user_profile.city = request.POST.get('city')
+            user_profile.country = request.POST.get('country')
+            user_profile.interests = request.POST.get('interests')
+            user_profile.user_id = last_user.id
 
-        #            profileform.save()
+            user_profile.save()
+
 
         return HttpResponseRedirect(reverse('images:index'))
     else:
         form = UserForm()
-        # profileform = ProfileForm()
     return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
