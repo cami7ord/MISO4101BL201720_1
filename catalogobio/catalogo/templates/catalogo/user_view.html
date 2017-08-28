@@ -1,0 +1,62 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Detalle | {{species.name}}</title>
+</head>
+<body>
+
+<div id="container" class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+        <h2 class="text-center">Actualizar Información</h2>
+
+    <form class="" action="{% url 'images:userUpdateAction' %}" method="get">
+
+        <div class="form-group">
+            <label for="name" class="control-label">Name: </label>
+            <input id="name" type="text" name="name" value="{{user.first_name}}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">Name: </label>
+            <input id="lname" type="text" name="lname" value="{{user.last_name}}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">Name: </label>
+            <input id="uname" type="text" name="uname" value="{{user.username}}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">Country: </label>
+            <input id="country" type="text" name="country" value="{{user.userprofile.country}}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">City: </label>
+            <input id="city" type="text" name="city" value="{{user.userprofile.city}}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name" class="control-label">Interest: </label>
+            <input id="interest" type="text" name="interests" value="{{user.userprofile.interests}}" class="form-control">
+        </div>
+
+       <!-- <div class="form-group picture">
+            <label for="picture" class="control-label">Picture: </label>
+            <img name="picture" src="/{{species.picture}}" class="img-responsive">
+        </div>-->
+
+        <div class="form-group ">
+            <input id="submit" type="submit"  value="Actualizar Información"
+                   class="btn btn-primary btn-block">
+        </div>
+        <div class="form-group ">
+            <input type="submit" name="back" value="Regresar"
+                   class="btn btn-primary btn-block">
+        </div>
+
+    </form>
+
+</div>
+
+
+</body>
+</html>

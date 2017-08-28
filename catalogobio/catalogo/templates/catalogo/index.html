@@ -31,15 +31,30 @@
         <span class="glyphicon glyphicon-plus-sign"></span>
         Add Species
       </a>
-      <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-      {% for species in species_list %}
-        <div class="">
-          <a href="species_view?id={{species.id}}">{{species.name}}</a>
-          <img src="/{{species.picture}}" class="img-responsive">
+
+        <h2 class="text-center">Listado de Especies</h2>
+
+        <div>
+            <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                Agregar Especie
+            </a>
         </div>
-      {% endfor %}
-      </div>
+
+        <ul class="list-group">
+            {% for species in species_list %}
+            <li class="list-group-item">
+                <div class="" style="margin-top: 5px;">
+                    <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
+                    <img src="/{{species.picture}}" class="img-responsive" style="margin-top: 5px;">
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
 
     </div> <!-- /container -->
+
   </body>
+
 </html>
+

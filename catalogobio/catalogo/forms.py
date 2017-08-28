@@ -1,4 +1,4 @@
-from .models import Species
+from .models import Species,User, UserProfile
 from django.forms import ModelForm
 
 class SpeciesForm(ModelForm):
@@ -10,5 +10,24 @@ class SpeciesForm(ModelForm):
             'scientific_name',
             'category',
             'picture',
-            'description'
+            'description',
             ]
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            ]
+
+#class ProfileForm(ModelForm):
+    #class Meta:
+     #   model = UserProfile
+      #  fields = [
+       #     'country',
+        #    'city',
+         #   'interests',
+        #]

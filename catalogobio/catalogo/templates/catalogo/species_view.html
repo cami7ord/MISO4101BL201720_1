@@ -3,37 +3,148 @@
 {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
-    <title>{{species.name}}</title>
-  </head>
-  <body>
-    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-      <form class="" action="{% url 'images:index' %}" method="get">
-          <div class="form-group">
+    <title>Detalle | {{species.name}}</title>
+</head>
+<body>
+<div id="container" class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+    <div id="update_label" class="alert alert-danger" style="display: none">
+        <strong>Modifica la información necesaria. Clic en Guardar.</strong>
+    </div>
+    <div id="success_label" class="alert alert-success" style="display: none">
+        <strong>Actualización realizada !</strong>
+    </div>
+    <form class="" action="{% url 'images:index' %}" method="get">
+        <div class="form-group">
             <label for="name" class="control-label">Name: </label>
-            <input type="text" name="name" value="{{species.name}}" class="form-control" readonly>
-          </div>
-          <div class="form-group scientific_name">
+            <input id="name" type="text" name="name" value="{{species.name}}" class="form-control" readonly>
+        </div>
+        <div class="form-group scientific_name">
             <label for="scientific_name" class="control-label">Scientific Name: </label>
-            <input type="text" name="scientific_name" value="{{species.scientific_name}}" class="form-control" readonly>
-          </div>
-          <div class="form-group category">
-            <label for="category" class="control-label">Category: </label>
-            <input type="text" name="category" value="{{species.category.name}}" class="form-control" readonly>
-          </div>
-          <div class="form-group picture">
+            <input id="s_name" type="text" name="scientific_name" value="{{species.scientific_name}}"
+                   class="form-control" readonly>
+        </div>
+        <div class="form-group category">
+            <label for="sel1">Category:</label>
+            <select class="form-control" id="category" disabled>
+                {% for category in categories %}
+                {% if category.name == species.category.name %}
+                <option selected>{{category.name}}</option>
+                {% else %}
+                <option>{{category.name}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group picture">
             <label for="picture" class="control-label">Picture: </label>
             <img name="picture" src="/{{species.picture}}" class="img-responsive">
-          </div>
-          <div class="form-group name">
+        </div>
+        <div class="form-group name">
             <label for="description" class="control-label">Description: </label>
-            <textarea name="description" rows="8" cols="80"  class="form-control" readonly>{{species.description}}</textarea>
-          </div>
-          <div class="form-group ">
-            <input type="submit" name="back" value="Index" class="btn btn-primary btn-block">
-          </div>
-      </form>
-    </div>
-  </body>
+            <textarea id="description" name="description" rows="8" cols="80" class="form-control"
+                      readonly>{{species.description}}</textarea>
+        </div>
+        <div class="form-group ">
+            <input id="update" onclick="enableUpdateSpecie()" value="Modificar" class="btn btn-warning btn-block">
+        </div>
+        <div class="form-group ">
+            <input id="submit" type="submit" name="back" value="Volver Lista de Especies"
+                   class="btn btn-primary btn-block">
+        </div>
+        <div class="form-group ">
+            <input id="save" onclick="updateSpecie()" value="Guardar" class="btn btn-success btn-block"
+                   style="display: none">
+        </div>
+        <div class="form-group ">
+            <input id="cancel" type="submit" name="back" value="Cancelar" class="btn btn-primary btn-block"
+                   style="display: none">
+        </div>
+    </form>
+
+</div>
+
+<!-- src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function enableUpdateSpecie() {
+        window.scroll(0, 0);
+        document.getElementById('update_label').style.display = 'block';
+
+        var elements = document.getElementsByTagName("input");
+        var description = document.getElementById("description");
+        var category = document.getElementById("category");
+
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].removeAttribute('readonly');
+        }
+        description.removeAttribute('readonly');
+        category.removeAttribute('disabled');
+
+        document.getElementById('update').style.display = 'none';
+        document.getElementById('submit').style.display = 'none';
+
+        document.getElementById('save').style.display = 'block';
+        document.getElementById('cancel').style.display = 'block';
+
+    }
+
+    function updateSpecie() {
+        var name = document.getElementById('name').value
+        var s_name = document.getElementById('s_name').value
+        var category = $("#category :selected").text();
+        var description = document.getElementById('description').value
+
+        $.ajax({
+            url: "{% url 'images:updateSpecies'%}",
+            type: "POST",
+            data: {
+                "id": "{{species.id}}",
+                "name": name,
+                "s_name": s_name,
+                "category": category,
+                "description": description,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (result) {
+                if (result == 'True') {
+
+                    var elements = document.getElementsByTagName("input");
+                    var description = document.getElementById("description");
+                    var category_element = document.getElementById("category");
+
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].readOnly = true;
+                    }
+
+                    description.readOnly = true;
+                    category_element.disabled = true;
+
+                    document.getElementById('update').style.display = 'block';
+                    document.getElementById('submit').style.display = 'block';
+
+                    document.getElementById('save').style.display = 'none';
+                    document.getElementById('cancel').style.display = 'none';
+
+                    window.scroll(0, 0);
+                    document.getElementById('update_label').style.display = 'none';
+                    document.getElementById('success_label').style.display = 'block';
+
+                    setTimeout(function () {
+                        document.getElementById('success_label').style.display = 'none';
+                    }, 2000);
+
+                }
+            },
+            error: function (xhr) {
+                alert('Ha Ocurrido un Error.');
+            }
+        });
+    }
+
+</script>
+
+</body>
 </html>
