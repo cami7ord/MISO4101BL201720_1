@@ -8,7 +8,6 @@
     <title>Índice</title>
   </head>
   <body>
-
     <div class="container">
 
         <br/>
@@ -36,6 +35,12 @@
                 <span class="glyphicon glyphicon-plus-sign"></span>
                 Agregar Especie
             </a>
+
+            <select class="" name="">
+            {% for category in category_list %}
+              <option value="{{category.name}}">{{category.name}}</option>
+            {% endfor %}
+            </select>
         </div>
 
         <ul class="list-group">
@@ -50,8 +55,6 @@
         </ul>
 
     </div> <!-- /container -->
-
   </body>
 
 </html>
-

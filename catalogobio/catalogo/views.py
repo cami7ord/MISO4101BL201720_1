@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
+from .models import Category
 from .models import Species
 from .models import Category
 from .models import User
@@ -14,7 +15,11 @@ from .forms import SpeciesForm, UserForm  # , ProfileForm
 
 def index(request):
     species_list = Species.objects.all()
-    context = {'species_list': species_list}
+    category_list = Category.objects.all()
+    context = {
+        'species_list': species_list,
+        'category_list': category_list,
+        }
     return render(request, 'catalogo/index.html', context)
 
 
