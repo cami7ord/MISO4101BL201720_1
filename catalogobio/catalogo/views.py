@@ -8,19 +8,28 @@ from .models import Species
 from .models import Category
 from .models import User
 from .models import UserProfile
-from .forms import SpeciesForm, UserForm  # , ProfileForm
+from .models import Comment
+from .forms import SpeciesForm, UserForm, CommentForm
 
 
 # Create your views here.
 
 def index(request):
-    species_list = Species.objects.all()
+    category = request.GET.get('category')
+    # if request.user.is_authenticated():
+    if category:
+        species_list = Species.objects.filter(category=category)
+    else:
+        species_list = Species.objects.all()
     category_list = Category.objects.all()
     context = {
         'species_list': species_list,
         'category_list': category_list,
-        }
+        'category': category,
+    }
     return render(request, 'catalogo/index.html', context)
+    # else:
+    #     return HttpResponseRedirect(reverse('catalogo:login'))
 
 
 def species_view(request):
@@ -33,7 +42,8 @@ def species_view(request):
 
     species = Species.objects.get(id=id)
     categories = Category.objects.all()
-    context = {'species': species, 'categories': categories}
+    comments = Comment.objects.filter(species_id=id)
+    context = {'species': species, 'categories': categories, 'comments': comments}
     return render(request, 'catalogo/species_view.html', context)
 
 
@@ -47,6 +57,7 @@ def species_create(request):
         form = SpeciesForm()
 
     return render(request, 'catalogo/species_create.html', {'form': form})
+
 
 def login_view(request):
 
@@ -66,7 +77,8 @@ def login_view(request):
         else:
             message = "Nombre de usuario o clave incorrecta"
 
-    return render(request, 'catalogo/login.html', {'message':message})
+    return render(request, 'catalogo/login.html', {'message': message})
+
 
 def logout_view(request):
     logout(request)
@@ -97,9 +109,10 @@ def userUpdate(request):
             return render(request, 'catalogo/user_view.html', context)
 
         else:
-            return HttpResponseRedirect(reverse('catalogo/login.html'))
+            return HttpResponseRedirect(reverse('catalogo:login'))
 
-def updateInformation (request):
+
+def updateInformation(request):
 
     if request.method == 'GET':
         name = request.GET.get('name')
@@ -110,8 +123,10 @@ def updateInformation (request):
         city = request.GET.get('city')
         interests = request.GET.get('interests')
 
-        User.objects.filter(id=request.user.id).update(first_name=name, last_name=last_name, username=username)
-        UserProfile.objects.filter(user_id=request.user.id).update(country=country, city=city, interests=interests)
+        User.objects.filter(id=request.user.id).update(
+            first_name=name, last_name=last_name, username=username)
+        UserProfile.objects.filter(user_id=request.user.id).update(
+            country=country, city=city, interests=interests)
 
         return HttpResponseRedirect(reverse('catalogo:index'))
 
@@ -135,7 +150,7 @@ def signup(request):
 
             last_user = User.objects.last()
 
-            user_profile= UserProfile()
+            user_profile = UserProfile()
             user_profile.city = request.POST.get('city')
             user_profile.country = request.POST.get('country')
             user_profile.interests = request.POST.get('interests')
@@ -143,8 +158,37 @@ def signup(request):
 
             user_profile.save()
 
-
         return HttpResponseRedirect(reverse('catalogo:index'))
     else:
         form = UserForm()
     return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
+
+
+def addComment(request):
+    if request.user.is_authenticated():
+
+        form = CommentForm(request.POST)
+        if request.method == 'GET':
+
+            return render(request, 'catalogo/comment.html', {'form': form, 'id': request.GET.get('species_id')})
+
+        else:
+            if form.is_valid():
+
+                comment_model = Comment()
+                comment_model.email = request.POST.get('email')
+                comment_model.text = request.POST.get('text')
+                comment_model.species_id = request.GET.get('species_id')
+
+                comment_model.save()
+
+                response = redirect('catalogo:viewspecies')
+                response['Location'] += '?id=' + request.GET.get('species_id')
+                return response
+
+            else:
+
+                return render(request, 'catalogo/comment.html', {'form': form})
+
+    else:
+        return HttpResponseRedirect(reverse('catalogo:login'))

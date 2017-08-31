@@ -46,17 +46,42 @@
             <textarea id="description" name="description" rows="8" cols="80" class="form-control"
                       readonly>{{species.description}}</textarea>
         </div>
-        <div class="form-group ">
+
+        <div class="form-group name">
+
+            <label for="comments" class="control-label">Comentarios: </label>
+
+            <ul class="list-group" style="margin-top: 10px">
+                {%if comments %}
+                    {% for comment in comments%}
+                    <label for="comments" class="control-label" style="margin-top: 10px">{{comment.email}} : </label>
+                    <textarea class="form-control" rows="3" readonly>{{comment.text}}</textarea>
+                    {% endfor %}
+                {% else %}
+                <p style="text-align: center"><strong >No hay aún comentarios</strong></p>
+                {% endif%}
+            </ul>
+        </div>
+
+        <div class="form-group " style="display: none">
             <input id="update" onclick="enableUpdateSpecie()" value="Modificar" class="btn btn-warning btn-block">
         </div>
+
+        <div class="form-group ">
+            <a id="comment" href="{% url 'images:comment'%}?species_id={{species.id}}"
+               class="btn btn-warning btn-block">Agregar Comentario</a>
+        </div>
+
         <div class="form-group ">
             <input id="submit" type="submit" name="back" value="Volver Lista de Especies"
                    class="btn btn-primary btn-block">
         </div>
+
         <div class="form-group ">
             <input id="save" onclick="updateSpecie()" value="Guardar" class="btn btn-success btn-block"
                    style="display: none">
         </div>
+
         <div class="form-group ">
             <input id="cancel" type="submit" name="back" value="Cancelar" class="btn btn-primary btn-block"
                    style="display: none">

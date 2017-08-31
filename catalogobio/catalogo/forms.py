@@ -1,5 +1,6 @@
-from .models import Species,User, UserProfile
-from django.forms import ModelForm
+from .models import Species, User, Comment
+from django.forms import ModelForm, TextInput
+
 
 class SpeciesForm(ModelForm):
 
@@ -23,11 +24,14 @@ class UserForm(ModelForm):
             'password',
             ]
 
-#class ProfileForm(ModelForm):
-    #class Meta:
-     #   model = UserProfile
-      #  fields = [
-       #     'country',
-        #    'city',
-         #   'interests',
-        #]
+
+class CommentForm(ModelForm):
+    READONLY_FIELDS = ('email')
+
+    class Meta:
+        model = Comment
+        fields = [
+            'email',
+            'text',
+        ]
+

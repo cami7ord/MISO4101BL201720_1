@@ -4,14 +4,33 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+      $(function(){
+        function filter(value, control){
+          var filter_url = "{% url 'images:index' %}?category=" + value;
+          control.attr('href', filter_url);
+        }
+
+        filter_btn = $("#category_button");
+        filter_ctrl = $("#category_filter");
+        filter_ctrl.change(function(){
+          filter(filter_ctrl.val(), filter_btn);
+        });
+
+        {% if category %}
+        filter_ctrl.val({{category}});
+        {% endif %}
+
+      });
+    </script>
     <meta charset="utf-8">
     <title>Índice</title>
   </head>
   <body>
     <div class="container">
-
         <br/>
-
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
@@ -27,34 +46,62 @@
         </nav>
         <h3 class="text-muted">Catalogo</h3>
       </div>
-
         <h2 class="text-center">Listado de Especies</h2>
-
         <div>
-            <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
-                <span class="glyphicon glyphicon-plus-sign"></span>
-                Agregar Especie
+          <div class="row">
+            <a href="{% url 'images:addspecies' %}"
+            class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus-sign">
+              </span>
+              Agregar Especie
             </a>
-
-            <select class="" name="">
+          </div>
+          <div class="row">
+            <label for="category_filter">
+              Categoría
+            </label>
+            <select id="category_filter"
+              name="category_filter">
+              <option value="" selected></option>
             {% for category in category_list %}
-              <option value="{{category.name}}">{{category.name}}</option>
+              <option value="{{category.id}}">
+                {{category.name}}
+              </option>
             {% endfor %}
             </select>
+          </div>
+
+            <a href="{% url 'images:index' %}"
+              class="btn btn-info"
+              id="category_button">
+              <span class="glyphicon glyphicon-menu-hamburger">
+              </span>
+              Filtrar
+            </a>
+
+            <a href="{% url 'images:index' %}"
+              class="btn btn-default"
+              id="clear_button">
+              <span class="glyphicon glyphicon-remove">
+              </span>
+              Limpiar
+            </a>
         </div>
 
         <ul class="list-group">
             {% for species in species_list %}
             <li class="list-group-item">
                 <div class="" style="margin-top: 5px;">
-                    <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
-                    <img src="/{{species.picture}}" class="img-responsive" style="margin-top: 5px;">
+                    <a href="species_view?id={{species.id}}">
+                      Ver Detalle Especie: {{species.name}}
+                    </a>
+                    <img src="/{{species.picture}}"
+                    class="img-responsive" style="margin-top: 5px;">
                 </div>
             </li>
             {% endfor %}
         </ul>
 
-    </div> <!-- /container -->
+    </div>
   </body>
-
 </html>
