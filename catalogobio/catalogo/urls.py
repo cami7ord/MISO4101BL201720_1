@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^user_update/$',views.userUpdate, name='userUpdate'),
     url(r'^user_update_action/$',views.updateInformation, name='userUpdateAction'),
     url(r'^signup/$',views.signup, name='signup'),
+    url(r'^comment/$',views.addComment, name='comment'),
 ]
