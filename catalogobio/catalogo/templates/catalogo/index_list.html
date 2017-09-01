@@ -1,0 +1,29 @@
+<div class="row">
+  {% for species in species_list %}
+  <div class="col-md-4 col-sm-6 co-lg 3 well"
+    align="center"
+    style="width: 300; height: 300;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: light-gray;">
+    <a href="species_view?id={{species.id}}">
+      Ver Detalle Especie: {{species.name}}
+    </a>
+    <div style="
+    width: 250; height: 250;
+    background-image: url(/{{species.picture}});
+    background-repeat: no-repeat;
+    background-position: center;">
+    </div>
+    <!-- <img src="/{{species.picture}}"
+      class="img-responsive"
+      style="margin-top: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      width: 80%; height: 80%;"> -->
+  </div>
+  {% endfor %}
+</div>

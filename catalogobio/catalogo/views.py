@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
+from .models import Category
 from .models import Species
 from .models import Category
 from .models import User
@@ -10,16 +11,42 @@ from .models import UserProfile
 from .models import Comment
 from .forms import SpeciesForm, UserForm, CommentForm
 
-
 # Create your views here.
 
+
 def index(request):
+    category = request.GET.get('category')
+
     if request.user.is_authenticated():
-        species_list = Species.objects.all()
-        context = {'species_list': species_list}
+        if category:
+            species_list = Species.objects.filter(category=category)
+        else:
+            species_list = Species.objects.all()
+        category_list = Category.objects.all()
+        context = {
+            'species_list': species_list,
+            'category_list': category_list,
+            'category': category,
+        }
         return render(request, 'catalogo/index.html', context)
     else:
         return HttpResponseRedirect(reverse('catalogo:login'))
+
+
+def species_list(request):
+    category = request.GET.get('category')
+    # import IPython; IPython.embed()
+    if category:
+        species_list = Species.objects.filter(category=category)
+    else:
+        species_list = Species.objects.all()
+    category_list = Category.objects.all()
+    context = {
+        'species_list': species_list,
+        'category_list': category_list,
+        'category': category,
+    }
+    return render(request, 'catalogo/index_list.html', context)
 
 
 def species_view(request):
@@ -48,6 +75,7 @@ def species_create(request):
 
     return render(request, 'catalogo/species_create.html', {'form': form})
 
+
 def login_view(request):
 
     if request.user.is_authenticated():
@@ -66,7 +94,8 @@ def login_view(request):
         else:
             message = "Nombre de usuario o clave incorrecta"
 
-    return render(request, 'catalogo/login.html', {'message':message})
+    return render(request, 'catalogo/login.html', {'message': message})
+
 
 def logout_view(request):
     logout(request)
@@ -99,7 +128,8 @@ def userUpdate(request):
         else:
             return HttpResponseRedirect(reverse('catalogo:login'))
 
-def updateInformation (request):
+
+def updateInformation(request):
 
     if request.method == 'GET':
         name = request.GET.get('name')
@@ -110,8 +140,10 @@ def updateInformation (request):
         city = request.GET.get('city')
         interests = request.GET.get('interests')
 
-        User.objects.filter(id=request.user.id).update(first_name=name, last_name=last_name, username=username)
-        UserProfile.objects.filter(user_id=request.user.id).update(country=country, city=city, interests=interests)
+        User.objects.filter(id=request.user.id).update(
+            first_name=name, last_name=last_name, username=username)
+        UserProfile.objects.filter(user_id=request.user.id).update(
+            country=country, city=city, interests=interests)
 
         return HttpResponseRedirect(reverse('catalogo:index'))
 
@@ -135,7 +167,7 @@ def signup(request):
 
             last_user = User.objects.last()
 
-            user_profile= UserProfile()
+            user_profile = UserProfile()
             user_profile.city = request.POST.get('city')
             user_profile.country = request.POST.get('country')
             user_profile.interests = request.POST.get('interests')
@@ -143,11 +175,11 @@ def signup(request):
 
             user_profile.save()
 
-
         return HttpResponseRedirect(reverse('catalogo:index'))
     else:
         form = UserForm()
     return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
+
 
 def addComment(request):
     if request.user.is_authenticated():
@@ -168,7 +200,7 @@ def addComment(request):
                 comment_model.save()
 
                 response = redirect('catalogo:viewspecies')
-                response['Location'] += '?id='+request.GET.get('species_id')
+                response['Location'] += '?id=' + request.GET.get('species_id')
                 return response
 
             else:

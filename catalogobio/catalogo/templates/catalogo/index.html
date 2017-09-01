@@ -3,17 +3,33 @@
 {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+      $(function(){
+        function filter(value){
+          var filter_list_url = "{% url 'catalogo:listspecies' %}?category=" + value;
+          species_list = $("#species_list");
+          species_list.load(filter_list_url);
+        }
+
+        var filter_ctrl = $("#category_filter");
+        filter_ctrl.change(function(){
+          filter(filter_ctrl.val());
+        });
+        filter(filter_ctrl.val());
+
+
+      });
+    </script>
     <meta charset="utf-8">
     <title>Índice</title>
-</head>
-<body>
-
-<div class="container">
-
-    <br/>
-
-    <div class="header clearfix">
+  </head>
+  <body>
+    <div class="container">
+        <br/>
+      <div class="header clearfix">
         <nav>
             <ul class="nav nav-pills pull-left">
                 <h2>Catalogo  de Biodiversidad</h2>
@@ -34,31 +50,32 @@
     </div>
 
     <h3 class="text-center">Listado de Especies</h3>
-
-    <!--<div>
-        <a href="{% url 'images:addspecies'%}" class="btn btn-primary">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-            Agregar Especie
-        </a>
-    </div>-->
     <div class="row">
-    {% for species in species_list %}
-    <div class="col-md-4 col-sm-6 co-lg 3 well" style=" margin-top: 20px;">
-            {% if imagen.imageFile == None %}
-            <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
-            <img src="/{{species.picture}}"  class="img-responsive" style="margin-top: 5px;" width="250" height="250">
-            {% else %}
-            <a href="species_view?id={{species.id}}">Ver Detalle Especie: {{species.name}}</a>
-            <img src="{{species.picture}}" class="img-responsive" style="margin-top: 5px;">
-            {% endif %}
-
-    </div>
-    {% endfor %}
+      <a href="{% url 'images:addspecies' %}"
+      class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus-sign">
+        </span>
+        Agregar Especie
+      </a>
     </div>
 
-</div> <!-- /container -->
+    <div class="row" id="filter_div" align="center">
+      <label for="category_filter">
+        Categoría
+      </label>
+      <select id="category_filter"
+        name="category_filter">
+        <option value="" selected></option>
+      {% for category in category_list %}
+        <option value="{{category.id}}">
+          {{category.name}}
+        </option>
+      {% endfor %}
+      </select>
 
-</body>
-
+    </div>
+    <br>
+    <div class="row" id="species_list">
+    </div>
+  </body>
 </html>
-
