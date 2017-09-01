@@ -17,20 +17,21 @@ from .forms import SpeciesForm, UserForm, CommentForm
 def index(request):
     category = request.GET.get('category')
 
-    # if request.user.is_authenticated():
-    if category:
-        species_list = Species.objects.filter(category=category)
+    if request.user.is_authenticated():
+        if category:
+            species_list = Species.objects.filter(category=category)
+        else:
+            species_list = Species.objects.all()
+        category_list = Category.objects.all()
+        context = {
+            'species_list': species_list,
+            'category_list': category_list,
+            'category': category,
+        }
+        return render(request, 'catalogo/index.html', context)
     else:
-        species_list = Species.objects.all()
-    category_list = Category.objects.all()
-    context = {
-        'species_list': species_list,
-        'category_list': category_list,
-        'category': category,
-    }
-    return render(request, 'catalogo/index.html', context)
-    # else:
-    #     return HttpResponseRedirect(reverse('catalogo:login'))
+        return HttpResponseRedirect(reverse('catalogo:login'))
+
 
 def species_list(request):
     category = request.GET.get('category')
@@ -46,6 +47,7 @@ def species_list(request):
         'category': category,
     }
     return render(request, 'catalogo/index_list.html', context)
+
 
 def species_view(request):
     if request.method != 'GET':
