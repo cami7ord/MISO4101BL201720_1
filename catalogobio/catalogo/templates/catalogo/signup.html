@@ -1,43 +1,98 @@
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Especie</title>
-  </head>
-  <body>
-    <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-    <div class="page-header"><h2>Registro</h2></div>
-    {% block content %}
-      <form action="{% url 'catalogo:signup' %}"
-      enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <!-- {{form.as_p}} -->
-          <div class="form-group">
-            <label for="country" class="control-label">Country: </label>
-            <input id="country" type="text" name="country" value="" class="form-control" placeholder="Country">
-        </div>
-        <div class="form-group">
-            <label for="city" class="control-label">City: </label>
-            <input id="city" type="text" name="city" value="" class="form-control" placeholder="City">
-        </div>
-        <div class="form-group">
-            <label for="interest" class="control-label">Interest: </label>
-            <input id="interest" type="text" name="interests" value="" class="form-control" placeholder="Interest">
-        </div>
-        {% buttons %}
+    <head>
+        <meta charset="utf-8">
+        <title>Especie</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
-        <input type="submit" value="Registrar" class="btn btn-primary btn-block"/>
-        <div class="form-group ">
-            <input type="submit" name="back" value="Cancelar"
-                   class="btn btn-default btn-block">
+        <!--<script src="/Users/cami7ord/Downloads/jquery-3.2.1.slim.min.js"></script>-->
+
+        <script>
+
+            function enviarForm() {
+
+                var info = {username : $('#username').val(),
+                            first_name: $('#first_name').val(),
+                            last_name: $('#last_name').val(),
+                            email: $('#email').val(),
+                            password: $('#password').val(),
+                            country: $('#country').val(),
+                            city: $('#city').val(),
+                            interest: $('#interest').val()
+                            };
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://0.0.0.0:8000/catalogo/signup/",
+                    data: JSON.stringify(info),
+                    contentType: "application/json; charset=UTF-8",
+                    dataType: "json",
+                    success: function(data) {
+                        window.location = "http://0.0.0.0:8000/catalogo/login/";
+                    },
+                    failure: function(error) {
+                        alert("Hubo un error: " + error);
+                    }
+                });
+
+                return false;
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+            <div class="page-header"><h2>Registro</h2></div>
+            <form action="" method="post" onsubmit="return enviarForm();">
+                <div class="form-group">
+                    <label for="username" class="control-label">Nombre de usuario: </label>
+                    <input id="username" type="text" name="username" value="" class="form-control"
+                           placeholder="Nombre de usuario">
+                </div>
+
+                <div class="form-group">
+                    <label for="first_name" class="control-label">Nombre: </label>
+                    <input id="first_name" type="text" name="first_name" value="" class="form-control" placeholder="Nombre">
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="control-label">Apellido: </label>
+                    <input id="last_name" type="text" name="last_name" value="" class="form-control" placeholder="Apellido">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="control-label">Email: </label>
+                    <input id="email" type="text" name="email" value="" class="form-control" placeholder="Email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="control-label">Password: </label>
+                    <input id="password" type="password" name="password" value="" class="form-control" placeholder="Contraseña">
+                </div>
+
+                <div class="form-group">
+                    <label for="country" class="control-label">País: </label>
+                    <input id="country" type="text" name="country" value="" class="form-control" placeholder="País">
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="control-label">Ciudad: </label>
+                    <input id="city" type="text" name="city" value="" class="form-control" placeholder="Ciudad">
+                </div>
+
+                <div class="form-group">
+                    <label for="interest" class="control-label">Intereses: </label>
+                    <input id="interest" type="text" name="interest" value="" class="form-control" placeholder="Intereses">
+                </div>
+
+                <input type="submit" value="Registrar" class="btn btn-primary btn-block"/>
+                <a href="https://enigmatic-cove-30432.herokuapp.com/catalogo/" class="btn btn-default btn-block">Cancelar</a>
+
+            </form>
         </div>
-        {% endbuttons %}
-      </form>
-    {% endblock %}
-    </div>
-  </body>
+    </body>
 </html>

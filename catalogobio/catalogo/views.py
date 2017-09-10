@@ -1,8 +1,14 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
+from django.core import serializers
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 
+from catalogobio import settings
 from .models import Category
 from .models import Species
 from .models import Category
@@ -147,38 +153,46 @@ def updateInformation(request):
 
         return HttpResponseRedirect(reverse('catalogo:index'))
 
-
+@csrf_exempt
 def signup(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-            username = cleaned_data.get('username')
-            first_name = cleaned_data.get('first_name')
-            last_name = cleaned_data.get('last_name')
-            password = cleaned_data.get('password')
-            email = cleaned_data.get('email')
+        jsonUser = json.loads(request.body)
 
-            user_model = User.objects.create_user(username=username, password=password)
-            user_model.first_name = first_name
-            user_model.last_name = last_name
-            user_model.email = email
-            user_model.save()
+        username = jsonUser['username']
+        first_name = jsonUser['first_name']
+        last_name = jsonUser['last_name']
+        email = jsonUser['email']
+        password = jsonUser['password']
 
-            last_user = User.objects.last()
+        user_model = User.objects.create_user(username=username, password=password)
+        user_model.first_name = first_name
+        user_model.last_name = last_name
+        user_model.email = email
+        user_model.save()
 
-            user_profile = UserProfile()
-            user_profile.city = request.POST.get('city')
-            user_profile.country = request.POST.get('country')
-            user_profile.interests = request.POST.get('interests')
-            user_profile.user_id = last_user.id
+        last_user = User.objects.last()
 
-            user_profile.save()
+        user_profile = UserProfile()
+        user_profile.city = jsonUser['city']
+        user_profile.country = jsonUser['country']
+        user_profile.interests = jsonUser['interest']
+        user_profile.user_id = last_user.id
 
-        return HttpResponseRedirect(reverse('catalogo:index'))
+        user_profile.save()
+
+        subject = "Bienvenida"
+        message = "Hola!/n Bienvenida monitora, Gracias por probar nuestra aplicacion"
+        from_email = settings.EMAIL_HOST_USER
+        to_list = [email, settings.EMAIL_HOST_USER]
+
+        send_mail(subject, message, from_email, to_list, fail_silently=True)
+
+        return HttpResponse(serializers.serialize("json", [user_model, user_profile]))
+
     else:
+
         form = UserForm()
-    return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
+        return render(request, 'catalogo/signup.html', {'form': form})  # , 'profileform':profileform})
 
 
 def addComment(request):
